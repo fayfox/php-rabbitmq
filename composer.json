@@ -1,0 +1,24 @@
+{
+    "name": "faysoft/rabbitmq",
+    "type": "library",
+    "description": "RabbitMQ队列公共代码",
+    "authors": [
+        {
+            "name": "Fayfox",
+            "email": "admin@fayfox.com",
+            "homepage": "https://www.fayfox.com"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "ext-json": "*",
+        "ext-amqp": "*",
+        "illuminate/support": "^9.0",
+        "illuminate/console": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kuabound\\RabbitMQ\\": "src"
+        }
+    }
+}
