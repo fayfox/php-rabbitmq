@@ -18,11 +18,7 @@ abstract class ConsumerCommand extends Command
      * @var array 失败延迟重试延迟时长（单位：秒）
      */
     protected static array $retryDelay = [
-        0,
-        5,
-        10,
-        30,
-        60,
+        0, 5, 10, 30, 60, 600
     ];
 
     /**
@@ -31,7 +27,7 @@ abstract class ConsumerCommand extends Command
     final public function handle(): void
     {
         try {
-            $consumer = new Consumer($this->getRouteKey(), '', $this->getExchangeName());
+            $consumer = new Consumer($this->getRouteKey(), $this->getQueueName(), $this->getExchangeName());
             Log::info('开始监听' . $this->getRouteKey());
         } catch (Exception $e) {
             Log::error($e);
@@ -93,8 +89,9 @@ abstract class ConsumerCommand extends Command
                 }
             });
         } catch (Exception $e) {
-            Log::error($e);
-            throw $e;
+            Log::alert("未知异常: " . $e->getMessage(), [
+                'exception' => $e
+            ]);
         }
     }
 
@@ -102,7 +99,17 @@ abstract class ConsumerCommand extends Command
      * 获取路由Key
      * @return string
      */
-    abstract public function getRouteKey(): string;
+    public function getRouteKey(): string
+    {
+        // 默认route_key与queue_name一致
+        return $this->getQueueName();
+    }
+
+    /**
+     * 获取路由Key
+     * @return string
+     */
+    abstract public function getQueueName(): string;
 
     /**
      * 交换机名称，默认为amq.direct
