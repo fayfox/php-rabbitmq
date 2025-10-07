@@ -154,6 +154,7 @@ class Publisher
         try {
             //记录请求ID，方便追踪
             $this->exchange->publish(json_encode($data), $routingKey, AMQP_NOPARAM, [
+                'delivery_mode' => AMQP_DELIVERY_MODE_PERSISTENT,
                 'headers' => [
                     'x-attempt-count' => $attempt,
                     'x-max-attempts' => 5,
